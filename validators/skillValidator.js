@@ -1,44 +1,32 @@
 const { check, body } = require("express-validator");
 const validatorMiddleware = require("../middlewares/validatorMiddleware");
 
-exports.getProjectValidator = [
+exports.getSkillValidator = [
   check("id").isMongoId().withMessage("Invalid ID"),
   validatorMiddleware,
 ];
 
-exports.createProjectValidator = [
+exports.createSkillValidator = [
   check("name")
     .notEmpty()
     .withMessage("name is required")
-    .isLength({ min: 3 })
+    .isLength({ min: 1 })
     .withMessage("name is too short")
     .isLength({ max: 32 })
     .withMessage("name is too long"),
 
-  check("desc")
-    .notEmpty()
-    .withMessage("description is required")
-    .isLength({ min: 3 })
-    .withMessage("description is too short")
-    .isLength({ max: 100 })
-    .withMessage("description is too long"),
-
   check("image").notEmpty().withMessage("image is required"),
-
-  check("previewLink").notEmpty().withMessage("preview link is required"),
-
-  check("sourceLink").optional(),
 
   validatorMiddleware,
 ];
 
-exports.updateProjectValidator = [
+exports.updateSkillValidator = [
   check("id").isMongoId().withMessage("Invalid ID"),
   body("name").optional(),
   validatorMiddleware,
 ];
 
-exports.deleteProjectValidator = [
+exports.deleteSkillValidator = [
   check("id").isMongoId().withMessage("Invalid ID"),
   validatorMiddleware,
 ];

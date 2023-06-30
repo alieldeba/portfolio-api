@@ -1,6 +1,7 @@
-// const path = require("path");
+const path = require("path");
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const env = require("dotenv");
 
@@ -8,15 +9,10 @@ env.config();
 
 const connectToDB = require("./config/database");
 const projectRoute = require("./routes/projectRoute");
-// const subCategoryRoute = require("./routes/subCategoryRoute");
-// const brandRoute = require("./routes/brandRoute");
-// const productRoute = require("./routes/productRoute");
-// const userRoute = require("./routes/userRoute");
-// const authRoute = require("./routes/authRoute");
+const skillRoute = require("./routes/skillRoute");
 
 const ApiError = require("./utils/apiError");
 const globalError = require("./middlewares/globalErrorMiddleware");
-// const hostNameMiddleware = require("./middlewares/hostNameMiddleware");
 
 // Database
 connectToDB();
@@ -26,9 +22,8 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-// app.use(express.static(path.join(__dirname)));
-
-// app.use(hostNameMiddleware);
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "assets")));
 app.use(globalError);
 
 if (process.env.NODE_ENV === "development") {
@@ -40,11 +35,7 @@ if (process.env.NODE_ENV === "development") {
 
 // Routes
 app.use(`${process.env.BASE_URL}/projects`, projectRoute);
-// app.use(`${process.env.BASE_URL}/subcategories`, subCategoryRoute);
-// app.use(`${process.env.BASE_URL}/brands`, brandRoute);
-// app.use(`${process.env.BASE_URL}/products`, productRoute);
-// app.use(`${process.env.BASE_URL}/users`, userRoute);
-// app.use(`${process.env.BASE_URL}/auth`, authRoute);
+app.use(`${process.env.BASE_URL}/skills`, skillRoute);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`There is no rout with this url ${req.originalUrl}`, 400));

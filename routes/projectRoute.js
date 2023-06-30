@@ -6,6 +6,8 @@ const {
   createProject,
   updateProject,
   deleteProject,
+  uploadProjectImage,
+  resizeProjectImage,
 } = require("../controllers/projectController");
 
 const {
@@ -17,7 +19,15 @@ const {
 
 const router = express.Router();
 
-router.route("/").get(getProjects).post(createProjectValidator, createProject);
+router
+  .route("/")
+  .get(getProjects)
+  .post(
+    uploadProjectImage,
+    resizeProjectImage,
+    createProjectValidator,
+    createProject
+  );
 
 router
   .route("/:id")
